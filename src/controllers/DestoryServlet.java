@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -12,18 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.TaskDTO;
 import utils.DBUtil;
-
 /**
- * Servlet implementation class UpdateServlet
+ * Servlet implementation class DestoryServlet
  */
-@WebServlet("/update")
-public class UpdateServlet extends HttpServlet {
+@WebServlet("/destroy")
+public class DestoryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UpdateServlet() {
+    public DestoryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,22 +31,22 @@ public class UpdateServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String _token = request.getParameter("_token");
-
-        if (_token!=null && _token.equals(request.getSession().getId())) {
+        System.out.println(_token);
+        System.out.println(request.getSession().getAttribute("task_id"));
+        System.out.println(request.getSession().getId());
+        if( _token != null && _token.equals(request.getSession().getId())){
             EntityManager em = DBUtil.createEntityManager();
+
             TaskDTO task = em.find(TaskDTO.class, (Integer)(request.getSession().getAttribute("task_id")));
 
-            task.setContent(request.getParameter("content"));
-
-            Timestamp current_time = new Timestamp(System.currentTimeMillis());
-            task.setTime_updated(current_time);
-
             em.getTransaction().begin();
+            em.remove(task);
             em.getTransaction().commit();
             em.close();
 
+            request.getSession().removeAttribute("task_id");
             response.sendRedirect(request.getContextPath()+"/index");
-        }
+            }
 
 
     }
