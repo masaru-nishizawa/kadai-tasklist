@@ -25,7 +25,7 @@
 
         <a href="${pageContext.request.contextPath}/index">タスク一覧へ戻る</a>
         <br/>
-        <a href="${pageContext.request.contextPath}/edit">このタスクの編集</a>
+        <a href="${pageContext.request.contextPath}/edit?id=${task.id}">このタスクの編集</a>
 
     </c:param>
 </c:import>
