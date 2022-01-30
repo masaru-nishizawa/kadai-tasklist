@@ -40,6 +40,11 @@ public class IndexServlet extends HttpServlet {
 
         em.close();
 
+        if(request.getSession().getAttribute("flush") != null) {
+            System.out.println("更新が完了しました");
+            request.getSession().removeAttribute("flush");
+        }
+
         request.setAttribute("tasks",t);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
